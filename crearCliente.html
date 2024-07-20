@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cliente</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Crear Cliente</h2>
+        <form id="crear-cliente-form">
+            <div class="form-group">
+                <label for="documento">Documento</label>
+                <input type="text" class="form-control" id="documento" name="documento" required>
+            </div>
+            <div class="form-group">
+                <label for="nombres">Nombres</label>
+                <input type="text" class="form-control" id="nombres" name="nombres" required>
+            </div>
+            <div class="form-group">
+                <label for="apellidos">Apellidos</label>
+                <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Crear Cliente</button>
+        </form>
+        <div id="mensaje" class="mt-3"></div>
+    </div>
+
+    <script>
+        document.getElementById('crear-cliente-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+
+            fetch('api/crearActualizarCliente.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const mensajeDiv = document.getElementById('mensaje');
+                if (data.success) {
+                    mensajeDiv.className = 'alert alert-success';
+                    mensajeDiv.textContent = data.message;
+                    document.getElementById('crear-cliente-form').reset();
+                } else {
+                    mensajeDiv.className = 'alert alert-danger';
+                    mensajeDiv.textContent = data.message;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
